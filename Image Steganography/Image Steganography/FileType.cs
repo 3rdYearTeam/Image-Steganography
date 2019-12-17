@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using static Image_Steganography.Tools;
 
 namespace Image_Steganography
@@ -36,16 +34,16 @@ namespace Image_Steganography
             return CorrespondingData;
         }
 
-        static private string ConvertToText(BitArray Data)
+        static private StringBuilder ConvertToText(BitArray Data)
         {
-            string text = "";
+            StringBuilder text = new StringBuilder("");
             int character = 0, x = 0, i;
 
             for(i = 0; i < Data.Length; i ++)
             {
                 if (i % 8 == 0 && i != 0)
                 {
-                    text += (char)character;
+                    text.Append((char)character);
                 }
 
                 if (Data[i])
@@ -58,7 +56,7 @@ namespace Image_Steganography
 
             if (i % 8 == 0)
             {
-                text += (char)character;
+                text.Append((char)character);
             }
 
             return text;

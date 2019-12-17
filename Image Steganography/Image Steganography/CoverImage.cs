@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Threading.Tasks;
-using System.IO;
 using static Image_Steganography.Tools;
 
 namespace Image_Steganography
@@ -169,7 +165,7 @@ namespace Image_Steganography
                 DataEmbedding(blue, 0, data, ref c);
         }
 
-        public void SaveImage(string path)
+        public void SaveImage(StringBuilder path)
         {
             int idx = 0;
             
@@ -181,7 +177,7 @@ namespace Image_Steganography
                     idx++;
                 }
          
-            image.Save(path);
+            image.Save(path.ToString());
         }
     }
 }

@@ -4,3 +4,16 @@ C:\Users\Ahmed\source\repos\Image Steganography\Image Steganography\bin\Debug\Im
 C:\Users\Ahmed\source\repos\Image Steganography\Image Steganography\obj\Debug\Image Steganography.csprojAssemblyReference.cache
 C:\Users\Ahmed\source\repos\Image Steganography\Image Steganography\obj\Debug\Image Steganography.exe
 C:\Users\Ahmed\source\repos\Image Steganography\Image Steganography\obj\Debug\Image Steganography.pdb
+C:\Users\dell\Downloads\Imagesteganorapy\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe.config
+C:\Users\dell\Downloads\Imagesteganorapy\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe
+C:\Users\dell\Downloads\Imagesteganorapy\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.pdb
+C:\Users\dell\Downloads\Imagesteganorapy\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.csprojAssemblyReference.cache
+C:\Users\dell\Downloads\Imagesteganorapy\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.csproj.CoreCompileInputs.cache
+C:\Users\dell\Downloads\Imagesteganorapy\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.exe
+C:\Users\dell\Downloads\Imagesteganorapy\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.pdb
+C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe.config
+C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe
+C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.pdb
+C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.csprojAssemblyReference.cache
+C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.exe
+C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.pdb

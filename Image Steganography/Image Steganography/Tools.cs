@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Image_Steganography
 {
     class Tools
@@ -15,6 +10,7 @@ namespace Image_Steganography
 
             return 0;
         }
+
         static public int ClearBit(int value, int i)
         {
             value = value & (value ^ (1 << i));

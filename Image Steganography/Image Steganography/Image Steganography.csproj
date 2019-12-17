@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bit.cs" />
+    <Compile Include="BigInteger.cs" />
     <Compile Include="CoverImage.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="Hamiltonian.cs" />

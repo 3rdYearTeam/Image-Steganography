@@ -1,61 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Image_Steganography
 {
     class Vigenere
     {
-        private string key;
+        private StringBuilder key;
         private int keyLength;
         public Vigenere()
         {
-            this.key = "saber";
+            this.key = new StringBuilder("saberr");
         }
-        public void updateKey(string s)
+        public void updateKey(StringBuilder s)
         {
             this.key = s;
             this.keyLength = s.Length;
         }
-        public void generateKey(string text)
+        public void generateKey(StringBuilder text)
         {
             this.keyLength = key.Length;
-            string k = this.key;
+            StringBuilder k = this.key;
             for (int i = 0; i < text.Length; i++)
             {
                 if (k.Length == text.Length)
                     break;
                 if (i == keyLength)
                     i = 0;
-                k += (key[i]);
+                k.Append((key[i]));
             }
             key = k;
         }
 
-        public string encryptText(string text)
+        public StringBuilder encryptText(StringBuilder text)
         {
-            string encryptedText = "";
+            StringBuilder encryptedText = new StringBuilder("");
             generateKey(text);
 
             for (int i = 0; i < text.Length; i++)
             {
                 int x = (text[i] + this.key[i]) % 255;
 
-                encryptedText += (char)x;
+                encryptedText.Append((char)x);
             }
             return encryptedText;
 
         }
 
-        public string decryptText(string encText)
+        public StringBuilder decryptText(StringBuilder encText)
         {
-            string originalText = "";
+            StringBuilder originalText = new StringBuilder("");
             for (int i = 0; i < encText.Length; i++)
             {
                 int x = (encText[i] - this.key[i] + 255) % 255;
-                originalText += (char)x;
+                originalText.Append((char)x);
             }
             return originalText;
         }

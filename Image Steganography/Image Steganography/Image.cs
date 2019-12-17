@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Threading.Tasks;
 using static Image_Steganography.Tools;
 
 namespace Image_Steganography
@@ -14,9 +10,9 @@ namespace Image_Steganography
         protected Bitmap image;
         protected List<int> red, green, blue;
         protected const int blockBits = 3,fileTypeBits = 4, dataBits = 25, dataOverHead = dataBits + 2 * blockBits + fileTypeBits;
-        public void ReadImage(String path)
+        public void ReadImage(StringBuilder path)
         {
-            image = new Bitmap(path);
+            image = new Bitmap(path.ToString());
             red = new List<int>();
             green = new List<int>();
             blue = new List<int>();
@@ -33,9 +29,11 @@ namespace Image_Steganography
 
         protected int Delta(int pixel, int temp)
         {
-     
+
             if (GetBit(pixel, 0) == GetBit(temp, 0) && GetBit(pixel, 1) == GetBit(temp, 1))
+            {
                 return pixel;
+            }
             else if (GetBit(pixel, 0) != GetBit(temp, 0) && GetBit(pixel, 1) == GetBit(temp, 1))
             {
                 if (pixel % 2 == 0)
