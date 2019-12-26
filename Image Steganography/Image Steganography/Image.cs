@@ -10,7 +10,7 @@ namespace Image_Steganography
         protected Bitmap image;
         protected List<int> red, green, blue;
         protected const int blockBits = 3,fileTypeBits = 4, dataBits = 25, dataOverHead = dataBits + 2 * blockBits + fileTypeBits;
-        public void ReadImage(StringBuilder path)
+        public void ReadImage(String path)
         {
             image = new Bitmap(path.ToString());
             red = new List<int>();
@@ -18,6 +18,7 @@ namespace Image_Steganography
             blue = new List<int>();
 
             for (int x = 0; x < image.Width; x++)
+            {
                 for (int y = 0; y < image.Height; y++)
                 {
                     Color pixelColor = image.GetPixel(x, y);
@@ -25,6 +26,7 @@ namespace Image_Steganography
                     green.Add(pixelColor.G);
                     blue.Add(pixelColor.B);
                 }
+            }
         }
 
         protected int Delta(int pixel, int temp)

@@ -1,58 +1,55 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
 
 namespace Image_Steganography
 {
     class Vigenere
     {
-        private StringBuilder key;
-        private int keyLength;
-        public Vigenere()
+        static private StringBuilder key;
+
+        static private void RandomizeKey(int sz)
         {
-            this.key = new StringBuilder("saberr");
-        }
-        public void updateKey(StringBuilder s)
-        {
-            this.key = s;
-            this.keyLength = s.Length;
-        }
-        public void generateKey(StringBuilder text)
-        {
-            this.keyLength = key.Length;
-            StringBuilder k = this.key;
-            for (int i = 0; i < text.Length; i++)
+            var charArray = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            key = new StringBuilder("");
+            Random random = new Random();
+
+            for (int i = 0; i < sz; i++)
             {
-                if (k.Length == text.Length)
-                    break;
-                if (i == keyLength)
-                    i = 0;
-                k.Append((key[i]));
+                key.Append(charArray[random.Next(charArray.Length)]);
             }
-            key = k;
         }
 
-        public StringBuilder encryptText(StringBuilder text)
+        static private void GenerateKey(StringBuilder text)
+        {
+            RandomizeKey(text.Length);
+        }
+
+        static public KeyValuePair<string, string> EncryptText(StringBuilder text)
         {
             StringBuilder encryptedText = new StringBuilder("");
-            generateKey(text);
+            GenerateKey(text);
 
             for (int i = 0; i < text.Length; i++)
             {
-                int x = (text[i] + this.key[i]) % 255;
+                int x = (text[i] + key[i]) % 255;
 
                 encryptedText.Append((char)x);
             }
-            return encryptedText;
 
+            return new KeyValuePair<string, string>(key.ToString(), encryptedText.ToString());
         }
 
-        public StringBuilder decryptText(StringBuilder encText)
+        static public StringBuilder DecryptText(StringBuilder encText, string key)
         {
             StringBuilder originalText = new StringBuilder("");
+           
             for (int i = 0; i < encText.Length; i++)
             {
-                int x = (encText[i] - this.key[i] + 255) % 255;
+                int x = (encText[i] - key[i] + 255) % 255;
                 originalText.Append((char)x);
             }
+
             return originalText;
         }
 

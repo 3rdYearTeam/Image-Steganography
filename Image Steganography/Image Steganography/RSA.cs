@@ -9,40 +9,41 @@ namespace Image_Steganography
 {
     class RSA
     {
-        private static readonly StringBuilder one = new StringBuilder("1");
-        private static readonly StringBuilder zero = new StringBuilder("0");
-        private static StringBuilder n, phi, e;
+        private static String one = new String("1");
+        private static readonly String zero = new String("0");
+        private static String n, phi, e;
         private static bool Generated = false;
 
-        public static StringBuilder ConvertToNumber(StringBuilder s)
+        public static String ConvertToNumber(String s)
         {
-            StringBuilder result = new StringBuilder(""), temp;
-            int sz = s.Length, x;
+            String result = new String(), temp;
+            int sz = s.Size(), x;
 
             for (int i = 0; i < sz; i++)
             {
                 x = s[i];
-                temp = new StringBuilder(x.ToString());
+                temp = new String(x.ToString());
                 
-                if(temp.Length % 3 != 0)
-                    temp = PadLeft(temp, 3 - temp.Length % 3);
+                if(temp.Size() % 3 != 0)
+                    temp = PadLeft(temp, 3 - temp.Size() % 3);
                
-                result.Append(temp);
+                result.PushBack(temp);
             }
 
             return result;
         }
-        public static StringBuilder ConvertToText(StringBuilder s)
+        public static String ConvertToText(String s)
         {
-            StringBuilder result = new StringBuilder("");
+            s = s.Clone();
+            String result = new String();
             int x = 0;
 
-            if (s.Length % 3 != 0)
+            if (s.Size() % 3 != 0)
             {
-                s = PadLeft(s,  3 - s.Length % 3); 
+                s = PadLeft(s,  3 - s.Size() % 3); 
             }
 
-            for (int i = 0, j; i < s.Length;)
+            for (int i = 0, j; i < s.Size();)
             {
                 j = 2;
                 x = 0;
@@ -59,42 +60,42 @@ namespace Image_Steganography
                     i++;
                 }
 
-                result.Append((char)x);
+                result.PushBack((char)x);
             }
 
             return result;
         }
 
-        private static StringBuilder[] BlocksSplit(StringBuilder text)
+        private static String[] BlocksSplit(String text)
         {
-            int blockSize = (n.Length - 1) / 3, rem = 0;
+            int blockSize = (n.Size() - 1) / 3, rem = 0;
 
-            if (text.Length % blockSize != 0)
+            if (text.Size() % blockSize != 0)
                 rem = 1;
 
-            StringBuilder[] blocks = new StringBuilder[text.Length / blockSize + rem];
-            StringBuilder temp = new StringBuilder("");
+            String[] blocks = new String[text.Size() / blockSize + rem];
+            String temp = new String("");
 
-            for (int i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Size(); i++)
             {
                 if (i % blockSize == 0 && i != 0)
                 {
                     blocks[i / blockSize - 1] = temp;
-                    temp = new StringBuilder("");
+                    temp = new String("");
                 }
 
-                temp.Append(text[i]);
+                temp.PushBack(text[i]);
             }
 
-            if (temp.Length > 0)
+            if (temp.Size() > 0)
                 blocks[blocks.Length - 1] = temp;
 
             return blocks;
         }
 
-        private static void ConvertNumToBits(BitArray bitArray, int s, StringBuilder text)
+        private static void ConvertNumToBits(BitArray bitArray, int s, String text)
         {
-            for (int i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Size(); i++)
             {
                 char ch = text[i];
                 int x = ch - '0', c = 0;
@@ -116,13 +117,13 @@ namespace Image_Steganography
         }
 
 
-        private static BitArray ConvertBlocksToBits(List<StringBuilder> encryption)
+        private static BitArray ConvertBlocksToBits(List<String> encryption)
         {
             int sz = encryption.Count * 4;
 
             foreach (var text in encryption)
             {
-                sz += text.Length * 4;
+                sz += text.Size() * 4;
             }
 
             BitArray bitArray = new BitArray(sz);
@@ -131,7 +132,7 @@ namespace Image_Steganography
             foreach (var text in encryption)
             {
                 ConvertNumToBits(bitArray, sz, text);
-                sz += text.Length * 4;
+                sz += text.Size() * 4;
 
                 for (int i = 0; i < 4; i++)
                     bitArray[sz++] = true;
@@ -140,9 +141,9 @@ namespace Image_Steganography
             return bitArray;
         }
 
-        private static StringBuilder ConvertBitsToNumbers(BitArray bitarray, ref int s)
+        private static String ConvertBitsToNumbers(BitArray bitarray, ref int s)
         {
-            StringBuilder text = new StringBuilder("");
+            String text = new String();
             int x = 0, p = 1, i;
 
             for (i = s; i < bitarray.Count; i++)
@@ -152,7 +153,7 @@ namespace Image_Steganography
                     if (x == 15)
                         break;
 
-                    text.Append(x);
+                    text.PushBack(x.ToString());
                     x = 0;
                     p = 1;
                 }
@@ -168,41 +169,36 @@ namespace Image_Steganography
         }
 
 
-        public static KeyValuePair<StringBuilder, BitArray> RSAEncryption(StringBuilder text)
+        public static KeyValuePair<String, BitArray> RSAEncryption(String text)
         {
             GeneratePublickKey();
-            StringBuilder privateKey = GeneratePrivateKey();
-            StringBuilder[] blocks = BlocksSplit(text);
-            List<StringBuilder> encryptedTexts = new List<StringBuilder>();
+            String privateKey = GeneratePrivateKey();
+            String[] blocks = BlocksSplit(text);
+            List<String> encryptedTexts = new List<String>();
 
             for (int i = 0; i < blocks.Length; i++)
             {
                 blocks[i] = ConvertToNumber(blocks[i]);
-                encryptedTexts.Add(Div(FastPower(blocks[i], e, n), n).r);
+                encryptedTexts.Add(FastPower(blocks[i], e.Clone(), n.Clone()));
             }
 
-            return new KeyValuePair<StringBuilder, BitArray>(privateKey, ConvertBlocksToBits(encryptedTexts));
+            return new KeyValuePair<String, BitArray>(privateKey, ConvertBlocksToBits(encryptedTexts));
         }
 
-        public static StringBuilder RSADecryption(BitArray bitArray, StringBuilder d)
+        public static String RSADecryption(BitArray bitArray, String d)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             GeneratePublickKey();
-            Console.WriteLine("public: " + stopwatch.ElapsedMilliseconds + "ms," + stopwatch.ElapsedMilliseconds / 1000 + "s");
-
             int sz = 0;
-            StringBuilder decryptedText = new StringBuilder("");
-            
-            stopwatch = Stopwatch.StartNew();
-
+            String decryptedText = new String("");
+      
             while (sz != bitArray.Length)
             {
-                StringBuilder subText = Div(FastPower(ConvertBitsToNumbers(bitArray, ref sz), d, n), n).r;
+                String subText = FastPower(ConvertBitsToNumbers(bitArray, ref sz), d.Clone(), n);
                 subText = ConvertToText(subText);
-                decryptedText.Append(subText);
+                decryptedText.PushBack(subText);
             }
-            Console.WriteLine("Decrypt: " + stopwatch.ElapsedMilliseconds + "ms," + stopwatch.ElapsedMilliseconds / 1000 + "s");
-
+            
             return decryptedText;
         }
 
@@ -221,40 +217,40 @@ namespace Image_Steganography
             return Convert.ToInt32(seed);
         }
 
-        public static StringBuilder RandomValue()
+        public static String RandomValue()
         {
             var timeStamp = new DateTimeOffset(DateTime.UtcNow).ToFileTime();
             int seed = GetAsYouCan(timeStamp);
             Random rand = new Random(seed);
-            return new StringBuilder(rand.Next(2, 1000).ToString());
+            return new String(rand.Next(2, 1000).ToString());
         }
 
-        public static StringBuilder GeneratePrivateKey()
+        public static String GeneratePrivateKey()
         {
 
-            StringBuilder k = one; // (k * phie + 1) % e == 0
+            String k = one.Clone(); // (k * phie + 1) % e == 0
 
-            while (!Div(StringAddation(Multiply(phi, k), one), e).r.Equals(zero))// 0000 0000 
+            while (!Div(StringAddation(FastMultiply(phi, k), one), e.Clone()).r.Equals(zero))// 0000 0000 
             {
-                k = StringAddation(k, one);  // add one 
+                k = StringAddation(k, one.Clone());  // add one 
             }
 
-            return Div(StringAddation(Multiply(phi, k), one), e).q;
+            return Div(StringAddation(FastMultiply(phi, k), one), e.Clone()).q;
         }
 
         public static void GeneratePublickKey()
         {
             if (!Generated)
             {
-                StringBuilder p =new StringBuilder("1000000007"), q = new StringBuilder("20988936657440586486151264256610222593863921"); // function tgbln el arkam el prime must be not equal
-                n = Multiply(p, q);
-                phi = Multiply(StringSubtraction(p, one), StringSubtraction(q, one));
+                String p =new String("1000000007"), q = new String("20988936657440586486151264256610222593863921"); // function tgbln el arkam el prime must be not equal
+                n = FastMultiply(p, q);
+                phi = FastMultiply(StringSubtraction(p, one), StringSubtraction(q, one));
                 Generated = true;
             }
 
             e = RandomValue(); // coprime to phi
 
-            while (!one.Equals(GCD(e, phi)))
+            while (!one.Equals(GCD(e.Clone(), phi.Clone())))
             {
                 e = StringAddation(e, one);
             }

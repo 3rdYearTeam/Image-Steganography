@@ -165,7 +165,7 @@ namespace Image_Steganography
                 DataEmbedding(blue, 0, data, ref c);
         }
 
-        public void SaveImage(StringBuilder path)
+        public void SaveImage(String path)
         {
             int idx = 0;
             

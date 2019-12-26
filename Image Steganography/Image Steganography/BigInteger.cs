@@ -1,202 +1,370 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Threading;
+using System.Diagnostics;
 
 namespace Image_Steganography
 {
     class BigInteger
     {
-        private static readonly StringBuilder one = new StringBuilder("1");
-        private static StringBuilder zero = new StringBuilder("0");
-        
-        public static StringBuilder MultiplyByTwo(StringBuilder x)
+        public class Pair
         {
-            StringBuilder result = new StringBuilder("");
+            public String q, r;
+        }
+
+        private static readonly String one = new String("1");
+        private static String zero = new String("0");
+
+        public static String FastMultiply(String a, String b)
+        {
+            List<int> l1 = new List<int>();
+            List<int> l2 = new List<int>();
+            BigInteger.ConvertToList(a, ref l1);
+            BigInteger.ConvertToList(b, ref l2);
+            var l = BigInteger.FFtmultiplication(l1, l2);
+            BigInteger.TzbeetElAnswer(ref l);
+            String result = new String(l.Count);
+
+            foreach (var digit in l)
+                result.PushBack(digit.ToString());
+
+            return result;
+        }
+
+        static void FFT(ref List<Complex> L, bool invert)
+        {
+            int sz = L.Count;
+
+            if (sz == 1)
+                return;
+            
+            List<Complex> evenList = new List<Complex>();
+            List<Complex> oddList = new List<Complex>();
+            
+            for (int i = 0; i * 2 < sz; i++)
+            {
+                evenList.Add(L[2 * i]);
+                oddList.Add(L[2 * i + 1]);
+            }
+            
+            FFT(ref evenList, invert);
+            FFT(ref oddList, invert);
+            double ang = 2 * Math.PI / sz * (invert ? -1 : 1);
+            Complex w = 1;
+            Complex wn = new Complex(Math.Cos(ang), Math.Sin(ang));
+            
+            for (int i = 0; i * 2 < sz; i++)
+            {
+                L[i] = evenList[i] + w * oddList[i];
+                L[i + sz / 2] = evenList[i] - w * oddList[i];
+                
+                if (invert)
+                {
+                    L[i] /= 2;
+                    L[i + sz / 2] /= 2;
+                }
+
+                w *= wn;
+            }
+        }
+
+        static void MakeLengthPowerOfTwo(ref int len, ref List<int> firstNumber, ref List<int> secondNumber, ref List<Complex> fftFirst, ref List<Complex> fftSecond)
+        {
+            while (len < firstNumber.Count + secondNumber.Count)
+            {
+                len <<= 1;
+            }
+
+            for (int i = 0; i < firstNumber.Count; i++)
+            {
+                fftFirst.Add(firstNumber[i]);
+            }
+            
+            for (int i = firstNumber.Count; i < len; i++)
+            {
+                fftFirst.Add(0);
+            }
+            
+            for (int i = 0; i < secondNumber.Count; i++)
+            {
+                fftSecond.Add(secondNumber[i]);
+            }
+            
+            for (int i = secondNumber.Count; i < len; i++)
+            {
+                fftSecond.Add(0);
+            }
+
+        }
+        public static List<int> FFtmultiplication(List<int> firstNumber, List<int> secondNumber)
+        {
+            List<Complex> fftFirst = new List<Complex>();
+            List<Complex> fftSecond = new List<Complex>();
+            int len = 1;
+            MakeLengthPowerOfTwo(ref len, ref firstNumber, ref secondNumber, ref fftFirst, ref fftSecond);
+
+            FFT(ref fftFirst, false);
+            FFT(ref fftSecond, false);
+            
+            for (int i = 0; i < len; i++)
+            {
+                fftFirst[i] *= fftSecond[i];
+            }
+            
+            FFT(ref fftFirst, true);
+            List<int> ret = new List<int>();
+            
+            for (int i = 0; i < len; i++)
+            {
+                ret.Add((int)Math.Round(fftFirst[i].Real));
+            }
+            
+            return ret;
+        }
+        public static void ConvertToList(String s, ref List<int> l)
+        {
+            for (int i = s.Size() - 1; i >= 0; i--)
+            {
+                l.Add(s[i] - '0');
+            }
+        }
+
+        public static void TzbeetElAnswer(ref List<int> ans)
+        {
+            int carry = 0;
+            List<int> ret = new List<int>();
+            
+            for (int i = 0; i < ans.Count; i++)
+            {
+                ans[i] += carry;
+                carry = ans[i] / 10;
+                ans[i] %= 10;
+            }
+            
+            bool ok = false;
+            
+            for (int i = ans.Count - 1; i >= 0; i--)
+            {
+                if (!ok && ans[i] != 0)
+                {
+                    ok = true;
+                }
+                if (ok)
+                    ret.Add(ans[i]);
+            }
+
+            ans = ret;
+        }
+
+        public static String MultiplyByTwo(String x)
+        {
+            String result = new String(x.Size() + 2, true);
             int carry = 0;
 
-            for (int i = x.Length - 1; i >= 0; i--)
+            for (int i = x.Size() - 1; i >= 0; i--)
             {
-                StringBuilder temp = new StringBuilder(((((x[i] - '0') * 2) + carry) % 10).ToString());
-                result = temp.Append(result);
+                result.PushFront(((((x[i] - '0') * 2) + carry) % 10).ToString());
                 carry = ((x[i] - '0') * 2) / 10;
             }
 
             if (carry > 0)
             {
-                StringBuilder temp = new StringBuilder(carry.ToString());
-                result = temp.Append(result);
+                result.PushFront(carry.ToString());
             }
+
             return result;
         }
 
-        public static StringBuilder Multiply(StringBuilder first, StringBuilder second)
+        public static String Multiply(String first, String second)
         {
-            if (first.Length != second.Length)
+            if (first.Size() != second.Size())
                 MakeLengthEqual(ref first, ref second);
-
-            if (first.Length == 1 || second.Length == 1)
+            
+            if (first.Size() == 1 || second.Size() == 1)
             {
-                StringBuilder ans = new StringBuilder((long.Parse(first.ToString()) * long.Parse(second.ToString())).ToString());
+                String ans = new String((long.Parse(first.ToString()) * long.Parse(second.ToString())).ToString());
                 return ans;
             }
 
+            if(first.Size() % 2 == 1)
+            {
+                first.PushFront('0');
+                second.PushFront('0');
+            }
+
             int cutPos = GetPostion(ref first);
-            StringBuilder a = GetFirstPart(first, cutPos);
-            StringBuilder b = GetSecondPart(first, cutPos);
-            StringBuilder c = GetFirstPart(second, cutPos);
-            StringBuilder d = GetSecondPart(second, cutPos);
+            String a = GetFirstPart(first, cutPos);
+            String b = GetSecondPart(first, cutPos);
+            String c = GetFirstPart(second, cutPos);
+            String d = GetSecondPart(second, cutPos);
 
-            StringBuilder ac = Multiply(a, c);
-            StringBuilder bd = Multiply(b, d);
-            StringBuilder ab_cd = Multiply(StringAddation(a, b), StringAddation(c, d));
 
-            return CalculateAnswer(ref ac, ref bd, ref ab_cd, b.Length + d.Length);
+            String ac = Multiply(a, c);
+            String bd = Multiply(b, d);
+            String ab_cd = Multiply(StringAddation(a, b), StringAddation(c, d));
+
+
+            return CalculateAnswer(ref ac, ref bd, ref ab_cd, b.Size() + d.Size());
         }
 
-        public static StringBuilder PadRight(StringBuilder s, int n)
+        public static String PadRight(String s, int n)
         {
-            while (n > 0)
+            while (n-- > 0)
             {
-                n--;
-                s.Append('0');
+                s.PushBack('0');
             }
             
             return s;
         }
 
-        public static StringBuilder PadLeft(StringBuilder s, int n)
+        public static String PadLeft(String s, int n)
         {
-            StringBuilder ret = new StringBuilder("");
-
-            while (n > 0)
+            while (n-- > 0)
             {
-                n--;
-                ret.Append('0');
+                s.PushFront('0');
             }
 
-            ret.Append(s);
-            return ret;
+            return s;
         }
 
-        private static StringBuilder CalculateAnswer(ref StringBuilder ac, ref StringBuilder bd, ref StringBuilder ab_cd, int padding)
+        private static String CalculateAnswer(ref String ac, ref String bd, ref String ab_cd, int padding)
         {
-            StringBuilder t = StringSubtraction(StringSubtraction(ab_cd, ac), bd);
-            StringBuilder tt = PadRight(t, padding / 2);
-            StringBuilder ttt = PadRight(ac, padding);
+            String t = StringSubtraction(StringSubtraction(ab_cd, ac), bd);
+            String tt = PadRight(t, padding / 2);
+            String ttt = PadRight(ac, padding);
 
             return StringAddation(StringAddation(tt, ttt), bd);
         }
 
-        private static StringBuilder GetFirstPart(StringBuilder str, int cutPos)
+        private static String GetFirstPart(String str, int cutPos)
         {
-            StringBuilder ret = new StringBuilder("");
+            String ret = new String();
+
             for (int i = 0; i < cutPos; i++)
-                ret.Append(str[i]);
+                ret.PushBack(str[i]);
+            
             return ret;
         }
 
-        private static StringBuilder GetSecondPart(StringBuilder str, int cutPos)
+        private static String GetSecondPart(String str, int cutPos)
         {
-            StringBuilder ret = new StringBuilder("");
-            for (int i = cutPos; i < str.Length; i++)
+            String ret = new String();
+
+            for (int i = cutPos; i < str.Size(); i++)
             {
-                ret.Append(str[i]);
+                ret.PushBack(str[i]);
             }
+
             return ret;
         }
 
-        private static int GetPostion(ref StringBuilder first)
+        private static int GetPostion(ref String first)
         {
-            return (first.Length + 1) / 2;
+            return (first.Size() + 1) / 2;
         }
 
-        public static StringBuilder StringAddation(StringBuilder a, StringBuilder b)
+        public static String StringAddation(String a, String b)
         {
-            StringBuilder result = new StringBuilder("");
-
-            if (a.Length > b.Length)
-            {
-                Swap(ref a, ref b);
-            }
-
-            MakeLengthEqual(ref a, ref b);
-            int length = a.Length;
+            String result = new String(Math.Max(a.Size(), b.Size()) + 2);
+            int j = b.Size() -1 , i = a.Size() - 1;
             int carry = 0, res;
 
-            for (int i = length - 1; i >= 0; i--)
+            while (j >= 0 && i >= 0)
             {
-                int n1 = int.Parse(a[i].ToString());
-                int n2 = int.Parse(b[i].ToString());
+                int n1 = a[i] - '0';
+                int n2 = b[j] - '0';
                 res = (n1 + n2 + carry) % 10;
                 carry = (n1 + n2 + carry) / 10;
-                StringBuilder temp = new StringBuilder(res.ToString());
-                result = temp.Append(result);
+                result.PushFront(res.ToString());
+                i--; j--;
             }
 
-            if (carry != 0)
+            while(i >= 0)
             {
-                StringBuilder temp = new StringBuilder(carry.ToString());
-                result = temp.Append(result);
+                int n1 = a[i] - '0';
+                res = (n1 + carry) % 10;
+                carry = (n1 + carry) / 10;
+                result.PushFront(res.ToString());
+                i--;
             }
+
+            while (j >= 0)
+            {
+                int n2 = b[j] - '0';
+                res = (n2 + carry) % 10;
+                carry = (n2 + carry) / 10;
+                result.PushFront(res.ToString());
+                j--;
+            }
+
+            if (carry > 0)
+                result.PushFront(carry.ToString());
 
             return SanitizeResult(ref result);
         }
 
-        public static StringBuilder GCD(StringBuilder a, StringBuilder b)
+        public static String GCD(String a, String b)
         {
             if (b.Equals(zero))
-                return a;
+                return a.Clone();
 
-            return GCD(b, Div(a, b).r);
+            return GCD(b, Div(a, b.Clone()).r);
         }
 
-
-        public static StringBuilder StringSubtraction(StringBuilder a, StringBuilder b)
+        public static String StringSubtraction(String a, String b)
         {
-            bool resultNegative = false;
-            StringBuilder result = new StringBuilder("");
 
-            if (StringIsSmaller(ref a, ref b))
+            /*if (StringIsSmaller(ref a, ref b)) // O(N)
             {
-                Swap(ref a, ref b);
-                resultNegative = true;
-            }
+                Swap(ref a, ref b); // O(1)
+            }*/
 
-            MakeLengthEqual(ref a, ref b);
-            int length = a.Length;
-            int carry = 0, res;
+            String result = new String(Math.Max(a.Size(), b.Size()) + 1, true);
+            int i = a.Size() - 1, j = b.Size() - 1;
+            int n;
 
-            for (int i = length - 1; i >= 0; i--)
+            while(j >= 0)
             {
-                bool nextCarry = false;
-                int n1 = int.Parse(a[i].ToString());
-                int n2 = int.Parse(b[i].ToString());
-
-                if (n1 - carry < n2)
+                n = a[i] - b[j]; 
+                
+                if (n >= 0)
                 {
-                    n1 = n1 + 10;
-                    nextCarry = true;
+                    result.PushFront(n.ToString());
+                    i--; j--;
                 }
-                res = (n1 - n2 - carry);
-                StringBuilder temp = new StringBuilder(res.ToString());
-                result = temp.Append(result);
-                if (nextCarry)
-                    carry = 1;
                 else
-                    carry = 0;
+                {
+                    n += 10;
+                    result.PushFront(n.ToString());
+                    i--; j--;
+
+                    while (j >= 0 && a[i] - 1 < b[j])
+                    {
+                        n = a[i] - b[j] + 9; // 10 - 1
+                        result.PushFront(n.ToString());
+                        i--; j--;
+                    }
+                    
+                    a[i]--;
+                }
             }
+
+            while(i >= 0)
+                result.PushFront(a[i--]);
 
             result = SanitizeResult(ref result);
             return result;
         }
 
-        private static bool StringIsSmaller(ref StringBuilder a, ref StringBuilder b)
+        private static bool StringIsSmaller(ref String a, ref String b)
         {
-            if (a.Length < b.Length)
+            if (a.Size() < b.Size())
                 return true;
-            if (a.Length > b.Length)
+            if (a.Size() > b.Size())
                 return false;
 
-            for (int i = 0; i < a.Length; i++)
+            for (int i = 0; i < a.Size(); i++)
             {
                 if (a[i] < b[i])
                     return true;
@@ -207,80 +375,64 @@ namespace Image_Steganography
             return false;
         }
 
-        private static void Swap(ref StringBuilder a, ref StringBuilder b)
+        private static void Swap(ref String a, ref String b)
         {
-            StringBuilder temp = a;
+            String temp = a;
             a = b;
             b = temp;
         }
 
-        private static StringBuilder RemoveZero(StringBuilder s)
+        private static String RemoveZero(String str)
         {
-            StringBuilder ret = new StringBuilder("");
-            int sz = s.Length;
-            Boolean ok = false;
+            while (str[0] == '0')
+                str.PopFront();
 
-            for (int i = 0; i < sz; i++)
-            {
-                if (s[i] != '0')
-                {
-                    ok = true;
-                }
-                if (ok)
-                    ret.Append(s[i]);
-            }
-
-            return ret;
+            return str;
         }
 
-        private static StringBuilder SanitizeResult(ref StringBuilder result)
+        private static String SanitizeResult(ref String result)
         {
             result = RemoveZero(result);
 
-            if (result.Length == 0)
-                result.Append("0");
+            if (result.Size() == 0)
+                result.PushBack("0");
 
             return result;
         }
 
-        private static void MakeLengthEqual(ref StringBuilder x, ref StringBuilder y)
+        private static void MakeLengthEqual(ref String x, ref String y)
         {
-            if (x.Length == y.Length)
+            if (x.Size() == y.Size())
                 return;
 
-            if (x.Length > y.Length)
+            if (x.Size() > y.Size())
             {
-                int n = x.Length - y.Length;
-                StringBuilder temp = new StringBuilder("");
+                int n = x.Size() - y.Size();
+                
                 for (int i = 0; i < n; i++)
                 {
-                    temp.Append('0');
+                    y.PushFront('0');
                 }
-                y = temp.Append(y);
+
                 return;
             }
 
-            if (y.Length > x.Length)
+            if (y.Size() > x.Size())
             {
-                int n = y.Length - x.Length;
-                StringBuilder temp = new StringBuilder("");
+                int n = y.Size() - x.Size();
+
                 for (int i = 0; i < n; i++)
                 {
-                    temp.Append('0');
+                    x.PushFront('0');
                 }
-                x = temp.Append(x);
+
                 return;
             }
         }
 
-        public class Pair
+        public static String DivByTwo(String x)
         {
-            public StringBuilder q, r;
-        }
-
-        public static StringBuilder DivByTwo(StringBuilder x)
-        {
-            StringBuilder result = new StringBuilder("");
+            String result = new String(x.Size());
             int last = 0;
 
             if (x[0] > '0')
@@ -289,12 +441,12 @@ namespace Image_Steganography
                     last = 5;
 
                 if (x[0] > '1')
-                    result.Append(((x[0] - '0') / 2).ToString());
+                    result.PushBack(((x[0] - '0') / 2).ToString());
             }
 
-            for (int i = 1; i < x.Length; i++)
+            for (int i = 1; i < x.Size(); i++)
             {
-                result.Append((((x[i] - '0') / 2 + last)).ToString());
+                result.PushBack((((x[i] - '0') / 2 + last)).ToString());
 
                 if ((x[i] - '0') % 2 != 0)
                     last = 5;
@@ -302,20 +454,44 @@ namespace Image_Steganography
                     last = 0;
             }
 
-            if (result.Length == 0)
-                result.Append("0");
+            if (result.Size() == 0)
+                result.PushBack("0");
 
             return result;
         }
 
-        public static Pair Div(StringBuilder a, StringBuilder b)
+        private static String FastMod(String a, String mod)
+        {    
+            
+            String ret = new String(mod.Size() + 2);
+            ret.PushBack("0");
+
+            for (int i = 0; i < a.Size(); i++) // O(N)
+            {
+                if (ret[0] != '0') // O(1)
+                {
+                    ret.PushBack(a[i]); // O(1)
+                }
+                else
+                {
+                    ret[0] = a[i]; // O(1)
+                }
+
+                if(!StringIsSmaller(ref ret, ref mod))
+                    ret.Assign(Div(ret, mod.Clone()).r); // O(1)
+            }
+
+            return ret;
+        }
+
+        public static Pair Div(String a, String b)
         {
             if (StringIsSmaller(ref a, ref b))
             {
                 Pair p = new Pair()
                 {
-                    q = new StringBuilder("0"),
-                    r = a
+                    q = new String("0"),
+                    r = a.Clone()
                 };
 
                 return p;
@@ -326,30 +502,34 @@ namespace Image_Steganography
 
             if (StringIsSmaller(ref p2.r, ref b))
                 return p2;
+
             p2.q = StringAddation(p2.q, one);
             p2.r = StringSubtraction(p2.r, b);
+         
             return p2;
         }
 
-        public static StringBuilder FastPower(StringBuilder a, StringBuilder p, StringBuilder mod)
+        public static String FastPower(String a, String p, String mod)
         {
-            StringBuilder ans = new StringBuilder("1");
-
-            while (StringIsSmaller(ref zero, ref p))
+            String ans = new String("1");
+            // O(N * Log n * Log p) // 300 * 1024 * 1024
+            while (StringIsSmaller(ref zero, ref p))  // O(1)
             {
-                if ((p[p.Length - 1] - '0') % 2 != 0)
-                {
-                    ans = Multiply(ans, a);
+                if (((p[p.Size() - 1] - '0') & 1) == 1) // O(1)
+                {   
+                    ans = FastMultiply(ans, a); // O(NlogN)
 
-                    if (StringIsSmaller(ref mod, ref ans))
-                        ans = Div(ans, mod).r;
+                    if (StringIsSmaller(ref mod, ref ans)) // O(N)
+                        ans = FastMod(ans, mod);  // O(N)
                 }
 
-                a = Multiply(a, a);
-                p = DivByTwo(p);
+                a = FastMultiply(a, a); // Nlog(N)
+                p = DivByTwo(p); // O(N)
 
-                if (StringIsSmaller(ref mod, ref a))
-                    a = Div(a, mod).r;
+                if (StringIsSmaller(ref mod, ref a)) // O(n)
+                {
+                    a = FastMod(a, mod); // O(N)
+                }
             }
 
             return ans;

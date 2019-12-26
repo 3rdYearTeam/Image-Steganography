@@ -14,7 +14,7 @@ namespace Image_Steganography
 
     class File
     {
-        static public Object GetCorrespondingData(BitArray data, FileType fileType)
+        static public Object GetCorrespondingData(BitArray data, FileType fileType, string key = "", string path = "")
         {
             Object CorrespondingData = new object();
 
@@ -24,7 +24,7 @@ namespace Image_Steganography
             }
             else if (fileType == FileType.image)
             {
-            //    ConvertToImage(data);
+                CorrespondingData = ConvertToImage(data, key, path);
             }
             else if (fileType == FileType.audio)
             {
@@ -61,5 +61,15 @@ namespace Image_Steganography
 
             return text;
         }
+
+        private static string ConvertToImage(BitArray Data, string key, string path)
+        {
+            var text = ConvertToText(Data);
+            var encryptedData = ImageCyptography.Decrypt(text.ToString(), key);
+            var bytes = ImageCyptography.ConvertStringToBytes(encryptedData.ToString());
+            path = ImageCyptography.BytesArrayToImage(bytes, path);
+            return path;
+        }
+
     }
 }

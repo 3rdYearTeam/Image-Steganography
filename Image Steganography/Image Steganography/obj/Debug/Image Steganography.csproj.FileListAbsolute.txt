@@ -17,3 +17,15 @@ C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganogr
 C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.csprojAssemblyReference.cache
 C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.exe
 C:\Users\Ahmed\Downloads\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.pdb
+C:\Users\Ahmed\Documents\GitHub\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe.config
+C:\Users\Ahmed\Documents\GitHub\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe
+C:\Users\Ahmed\Documents\GitHub\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.pdb
+C:\Users\Ahmed\Documents\GitHub\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.csprojAssemblyReference.cache
+C:\Users\Ahmed\Documents\GitHub\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.exe
+C:\Users\Ahmed\Documents\GitHub\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.pdb
+C:\Users\Ahmed\Desktop\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe.config
+C:\Users\Ahmed\Desktop\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.exe
+C:\Users\Ahmed\Desktop\Image-Steganography\Image Steganography\Image Steganography\bin\Debug\Image Steganography.pdb
+C:\Users\Ahmed\Desktop\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.csprojAssemblyReference.cache
+C:\Users\Ahmed\Desktop\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.exe
+C:\Users\Ahmed\Desktop\Image-Steganography\Image Steganography\Image Steganography\obj\Debug\Image Steganography.pdb
