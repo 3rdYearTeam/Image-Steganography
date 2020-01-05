@@ -1,0 +1,35 @@
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\bin\Debug\Algo.exe.config
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\bin\Debug\Algo.exe
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\bin\Debug\Algo.pdb
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Properties.Resources.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.csproj.GenerateResource.Cache
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.exe
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.pdb
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Form1.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.image.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Text1.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Audio1.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.welcome.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Encrypt_text.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Decrypt_text.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Image_encrypt.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.Image_Dec.resources
+c:\users\b.k\documents\visual studio 2015\Projects\Algo\Algo\obj\Debug\Algo.csprojResolveAssemblyReference.cache
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.csprojAssemblyReference.cache
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Audio1.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Decrypt_text.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Encrypt_text.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Form1.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.image.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Image_Dec.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Image_encrypt.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Properties.Resources.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.Text1.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.welcome.resources
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.csproj.GenerateResource.cache
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.exe
+C:\Users\user\Desktop\Algo\Algo\Algo\obj\Debug\Algo.pdb
+C:\Users\user\Desktop\Algo\Algo\Algo\bin\Debug\Algo.exe.config
+C:\Users\user\Desktop\Algo\Algo\Algo\bin\Debug\Algo.exe
+C:\Users\user\Desktop\Algo\Algo\Algo\bin\Debug\Algo.pdb
